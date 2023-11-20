@@ -10,31 +10,32 @@ import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography"
 import UserAuth from "./userAuth"
 import StoreAuth from "./storeAuth"
+import { useDispatch, useSelector } from "react-redux"
 
 const steps = ["UserAuth", "StoreAuth", "Success"]
 
-function getStepContent(step: number) {
-  switch (step) {
-    case 0:
-      return <UserAuth />
-    case 1:
-      return <StoreAuth />
-    case 2:
-      return <>성공</>
-    default:
-      throw new Error("Unknown step")
-  }
-}
-
 export default function SignupForm() {
   const [activeStep, setActiveStep] = React.useState(0)
+  const [userAuthCompleted, setUserAuthCompleted] = React.useState(false)
+  const [isEmailAvailable, setIsEmailAvailable] = React.useState<boolean | null>(null)
+  const dispatch = useDispatch()
+  const userInfo = useSelector((state) => state.userInfo)
 
   const handleNext = () => {
+    // if (activeStep === 0 && (!userAuthCompleted || !isEmailAvailable)) {
+    //   // Don't proceed to the next step if UserAuth is not completed or email is not available
+    //   return
+    // }
+
     setActiveStep(activeStep + 1)
   }
 
   const handleBack = () => {
     setActiveStep(activeStep - 1)
+  }
+
+  const handleUserAuthComplete = () => {
+    setUserAuthCompleted(true)
   }
 
   return (
@@ -44,7 +45,7 @@ export default function SignupForm() {
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
           <Typography component="h1" variant="h4" align="center">
-            Checkout
+            회원가입
           </Typography>
           <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
             {steps.map((label) => (
@@ -54,26 +55,24 @@ export default function SignupForm() {
             ))}
           </Stepper>
           {activeStep === steps.length ? (
-            <React.Fragment>
-              <Typography variant="h5" gutterBottom>
-                Thank you for your order.
-              </Typography>
-              <Typography variant="subtitle1">
-                Your order number is #2001539. We have emailed your order confirmation, and will send you an update when
-                your order has shipped.
-              </Typography>
-            </React.Fragment>
+            <React.Fragment>{/* ... (same as your existing code) */}</React.Fragment>
           ) : (
             <React.Fragment>
-              {getStepContent(activeStep)}
+              {getStepContent(activeStep, { onUserAuthComplete: handleUserAuthComplete })}
               <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                 {activeStep !== 0 && (
                   <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
                     Back
                   </Button>
                 )}
-                <Button variant="contained" onClick={handleNext} sx={{ mt: 3, ml: 1 }}>
-                  {activeStep === steps.length - 1 ? "Place order" : "Next"}
+                <Button
+                  variant="contained"
+                  onClick={handleNext}
+                  sx={{ mt: 3, ml: 1 }}
+                  // disabled={activeStep === 0 && !userAuthCompleted}
+                >
+                  {/* {activeStep === steps.length - 1 ? "Place order" : "Next"} */}
+                  Next
                 </Button>
               </Box>
             </React.Fragment>
@@ -82,4 +81,17 @@ export default function SignupForm() {
       </Container>
     </React.Fragment>
   )
+}
+
+function getStepContent(step: number, { onUserAuthComplete }: { onUserAuthComplete: () => void }) {
+  switch (step) {
+    case 0:
+      return <UserAuth onUserAuthComplete={onUserAuthComplete} />
+    case 1:
+      return <StoreAuth />
+    case 2:
+      return <>성공</>
+    default:
+      throw new Error("Unknown step")
+  }
 }
