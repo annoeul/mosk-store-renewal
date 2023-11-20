@@ -9,6 +9,8 @@ import { Visibility } from "@mui/icons-material"
 import { VisibilityOff } from "@mui/icons-material"
 import useInput from "../../../hooks/useInput"
 import signApi from "../../../apis/signApi"
+import CheckIcon from "@mui/icons-material/Check"
+import ClearIcon from "@mui/icons-material/Clear"
 import { UserAuthT } from "../../../model/userAuth"
 import { useDispatch, useSelector } from "react-redux"
 import { setUserInfo } from "../../../store/slices/userInfo"
@@ -28,11 +30,11 @@ function UserAuth({ onUserAuthComplete }: UserAuthProps): JSX.Element {
   const [showPassword, setShowPassword] = useState(false)
   const [isEmailAvailable, setIsEmailAvailable] = useState<boolean | null>(null)
   const [passwordMatch, setPasswordMatch] = useState<boolean>(true)
-  const [checkPassword, setCheckPassword] = useState<string>("")
 
   const dispatch = useDispatch()
   const userInfo = useSelector((state) => state.userInfo)
 
+  const [checkPassword, setCheckPassword] = useState<string>("")
   const { userInput, onChange } = useInput<UserAuthT>({
     email: "",
     password: "",
@@ -64,6 +66,19 @@ function UserAuth({ onUserAuthComplete }: UserAuthProps): JSX.Element {
       }
       console.error(error.response ? error.response.status : error.message)
     }
+  }
+
+  const handlePasswordCheckChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target
+
+    // 비밀번호 체크 입력란에 입력이 있을 때만 userInfo에 password 저장
+    if (value) {
+      dispatch(setUserInfo({ ...userInfo, password: value }))
+    }
+
+    // 비밀번호 체크 로직 추가 (예: 일치 여부 검사)
+    const isMatch = value === userInput.password
+    setPasswordMatch(isMatch)
   }
 
   useEffect(() => {
@@ -128,22 +143,27 @@ function UserAuth({ onUserAuthComplete }: UserAuthProps): JSX.Element {
             name="passwordCheck"
             label="passwordCheck"
             value={checkPassword}
-            onChange={(e) => setCheckPassword(e.target.value)}
+            onChange={(e) => {
+              setCheckPassword(e.target.value)
+              handlePasswordCheckChange(e)
+            }}
             fullWidth
             variant="standard"
             placeholder="위와 동일한 비밀번호를 입력해주세요."
             type={showPassword ? "text" : "password"}
-            error={!passwordMatch}
-            helperText={!passwordMatch ? "비밀번호가 일치하지 않습니다." : ""}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton onClick={handleTogglePasswordVisibility} edge="end">
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
+                  {checkPassword.length > 0 && !passwordMatch ? (
+                    <ClearIcon style={{ color: "red" }} />
+                  ) : (
+                    checkPassword.length > 0 && <CheckIcon style={{ color: "green" }} />
+                  )}
                 </InputAdornment>
               ),
             }}
+            error={!passwordMatch}
+            helperText={!passwordMatch ? "비밀번호가 일치하지 않습니다." : ""}
           />
         </Grid>
       </Grid>
