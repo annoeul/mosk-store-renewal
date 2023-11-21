@@ -28,7 +28,6 @@ type UserAuthProps = {
 
 function UserAuth({ onUserAuthComplete }: UserAuthProps): JSX.Element {
   const [showPassword, setShowPassword] = useState(false)
-  const [isEmailAvailable, setIsEmailAvailable] = useState<boolean | null>(null)
   const [passwordMatch, setPasswordMatch] = useState<boolean>(true)
 
   const dispatch = useDispatch()
@@ -71,19 +70,13 @@ function UserAuth({ onUserAuthComplete }: UserAuthProps): JSX.Element {
   const handlePasswordCheckChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
 
-    // 비밀번호 체크 입력란에 입력이 있을 때만 userInfo에 password 저장
     if (value) {
       dispatch(setUserInfo({ ...userInfo, password: value }))
     }
 
-    // 비밀번호 체크 로직 추가 (예: 일치 여부 검사)
     const isMatch = value === userInput.password
     setPasswordMatch(isMatch)
   }
-
-  useEffect(() => {
-    console.log("Updated userInfo:", userInfo)
-  }, [userInfo])
 
   return (
     <React.Fragment>

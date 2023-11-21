@@ -11,21 +11,64 @@ import Typography from "@mui/material/Typography"
 import UserAuth from "./userAuth"
 import StoreAuth from "./storeAuth"
 import { useDispatch, useSelector } from "react-redux"
+import signApi from "../../apis/signApi"
+import { useNavigate } from "react-router-dom"
 
 const steps = ["UserAuth", "StoreAuth", "Success"]
 
 export default function SignupForm() {
   const [activeStep, setActiveStep] = React.useState(0)
   const [userAuthCompleted, setUserAuthCompleted] = React.useState(false)
-  const [isEmailAvailable, setIsEmailAvailable] = React.useState<boolean | null>(null)
-  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const userInfo = useSelector((state) => state.userInfo)
 
-  const handleNext = () => {
-    // if (activeStep === 0 && (!userAuthCompleted || !isEmailAvailable)) {
-    //   // Don't proceed to the next step if UserAuth is not completed or email is not available
-    //   return
-    // }
+  const handleNext = async () => {
+    if (activeStep === 0) {
+      if (!userInfo.email) {
+        alert("이메일을 확인해주세요")
+        return
+      } else if (!userInfo.password) {
+        alert("비밀번호를 확인해주세요")
+        return
+      }
+    }
+    if (activeStep === 1) {
+      if (!userInfo.storeName) {
+        alert("상호명을 확인해주세요.")
+        return
+      } else if (!userInfo.ownerName) {
+        alert("사업주명을 확인해주세요.")
+        return
+      } else if (!userInfo.call) {
+        alert("휴대폰 번호를 확인해주세요.")
+        return
+      } else if (!userInfo.address) {
+        alert("주소를 확인해주세요.")
+        return
+      } else if (!userInfo.crn) {
+        alert("사업자등록번호를 확인해주세요.")
+        return
+      }
+      try {
+        const response = await signApi.post("/public/stores", {
+          email: userInfo.email,
+          password: userInfo.password,
+          storeName: userInfo.storeName,
+          ownerName: userInfo.ownerName,
+          call: userInfo.call,
+          address: userInfo.address,
+          crn: userInfo.crn,
+        })
+        if (response.status === 201) {
+          alert("회원가입에 성공하셨습니다!. 로그인 후 이용해주세요.")
+          navigate("/") // 로그인 후 '/'로 이동
+        } else if (response.status === 400) {
+          return
+        }
+      } catch (error) {
+        console.error("회원가입에 실패했습니다.", error.message)
+      }
+    }
 
     setActiveStep(activeStep + 1)
   }
@@ -55,7 +98,7 @@ export default function SignupForm() {
             ))}
           </Stepper>
           {activeStep === steps.length ? (
-            <React.Fragment>{/* ... (same as your existing code) */}</React.Fragment>
+            <React.Fragment></React.Fragment>
           ) : (
             <React.Fragment>
               {getStepContent(activeStep, { onUserAuthComplete: handleUserAuthComplete })}
@@ -65,14 +108,8 @@ export default function SignupForm() {
                     Back
                   </Button>
                 )}
-                <Button
-                  variant="contained"
-                  onClick={handleNext}
-                  sx={{ mt: 3, ml: 1 }}
-                  // disabled={activeStep === 0 && !userAuthCompleted}
-                >
-                  {/* {activeStep === steps.length - 1 ? "Place order" : "Next"} */}
-                  Next
+                <Button variant="contained" onClick={handleNext} sx={{ mt: 3, ml: 1 }}>
+                  {activeStep === 0 ? "Next" : activeStep === 1 ? "회원가입" : "로그인"}
                 </Button>
               </Box>
             </React.Fragment>
@@ -90,7 +127,7 @@ function getStepContent(step: number, { onUserAuthComplete }: { onUserAuthComple
     case 1:
       return <StoreAuth />
     case 2:
-      return <>성공</>
+      return <></>
     default:
       throw new Error("Unknown step")
   }
