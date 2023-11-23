@@ -1,7 +1,17 @@
-import React from "react"
+import Product from "../components/Product"
+import Category from "../components/Category"
+import Header from "../components/Header"
 
 function DashHomePage() {
-  return <div>DashHomePage</div>
+  return (
+    <>
+      <Header />
+      <div style={{ display: "flex" }}>
+        <Category />
+        <Product />
+      </div>
+    </>
+  )
 }
 
 export default DashHomePage
