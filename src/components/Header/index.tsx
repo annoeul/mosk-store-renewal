@@ -16,9 +16,9 @@ export default function Header() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            News
+            StoreName
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button color="inherit">logout</Button>
         </Toolbar>
       </AppBar>
     </Box>
