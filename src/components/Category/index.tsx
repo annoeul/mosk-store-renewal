@@ -1,20 +1,20 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import * as S from "./style"
 import { useGetDatasQuery } from "../../apis/getData"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import { setCategory } from "../../store/slices/selectItem"
+import { SpeedDial, SpeedDialIcon } from "@mui/material"
 
 function Category() {
   const { data, isLoading, isError } = useGetDatasQuery(1)
   const dispatch = useDispatch()
 
-  const handleCategoryClick = (categoryId) => {
+  const [selectedCategory, setSelectedCategory] = useState(null)
+
+  const handleCategoryClick = (categoryId: number) => {
     dispatch(setCategory(categoryId))
+    setSelectedCategory(categoryId)
   }
-  // console.log(selectedCategory)
-  // if (data) {
-  //   console.log(data.data)
-  // }
 
   if (isLoading) {
     return <>로딩중</>
@@ -22,12 +22,22 @@ function Category() {
 
   return (
     <S.CategoryWrapper>
-      Category
+      {/* <SpeedDial
+        ariaLabel="SpeedDial basic example"
+        sx={{ position: "absolute", bottom: 16, right: 16 }}
+        icon={<SpeedDialIcon />}
+      /> */}
+
+      <S.CategoryBtn>카테고리 생성</S.CategoryBtn>
       {data.data &&
         data.data.map((item) => (
-          <S.CategoryBtnWrapper key={item.id}>
-            <S.CategoryBtn onClick={() => handleCategoryClick(item.id)}>{item.name}</S.CategoryBtn>
-          </S.CategoryBtnWrapper>
+          <S.CategoryNameWrapper
+            onClick={() => handleCategoryClick(item.id)}
+            key={item.id}
+            style={{ backgroundColor: selectedCategory === item.id ? "#ddd" : "transparent" }}
+          >
+            <S.CategoryName>{item.name}</S.CategoryName>
+          </S.CategoryNameWrapper>
         ))}
     </S.CategoryWrapper>
   )
