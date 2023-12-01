@@ -3,11 +3,9 @@ import * as S from "./style"
 import { useGetDatasQuery } from "../../apis/getData"
 import { useDispatch } from "react-redux"
 import { setCategory } from "../../store/slices/selectItem"
-import { SpeedDial, SpeedDialIcon } from "@mui/material"
 
 function Category({ storeId }) {
-  console.log(storeId)
-  const { data, isLoading, isError } = useGetDatasQuery(1)
+  const { data, isLoading, isError } = useGetDatasQuery(storeId)
   const dispatch = useDispatch()
 
   const handleCategoryClick = (categoryId: number) => {
@@ -24,7 +22,7 @@ function Category({ storeId }) {
       {data.data &&
         data.data.map((item) => (
           <S.CategoryNameWrapper onClick={() => handleCategoryClick(item.id)} key={item.id}>
-            <S.CategoryName>{item.name}</S.CategoryName>
+            <S.CategoryName>{data.data.length === 0 ? "카테고리가 없습니다." : item.name}</S.CategoryName>
           </S.CategoryNameWrapper>
         ))}
     </S.CategoryWrapper>

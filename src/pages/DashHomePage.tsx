@@ -5,14 +5,15 @@ import { useLocation } from "react-router-dom"
 
 function DashHomePage() {
   const location = useLocation()
-  const { storeId } = location.state || {}
+  // const { storeId } = location.state || {}
+  const { storeId } = location.state
 
   return (
     <>
       <Header />
       <div style={{ display: "flex" }}>
         <Category storeId={storeId} />
-        <Product />
+        <Product storeId={storeId} />
       </div>
     </>
   )
