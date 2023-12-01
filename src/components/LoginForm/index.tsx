@@ -28,30 +28,36 @@ export default function LoginForm() {
     e.preventDefault()
 
     try {
-      const response = await signApi.post("/public/auth", {
+      const loginPromise = signApi.post("/public/auth", {
         email: userInput.email,
         password: userInput.password,
       })
 
-      if (response.status === 201) {
-        const accessToken = response.data?.data?.accessToken
+      const loginResponse = await loginPromise
+
+      if (loginResponse.status === 201) {
+        const accessToken = loginResponse.data?.data?.accessToken
         setCookie("accessToken", accessToken, { path: "/" })
-        const storeResponse = await axios.get(`${import.meta.env.VITE_SERVER_URL}/stores`, {
+
+        const storePromise = signApi.get(`/stores`, {
           headers: {
-            Authorization: `Bearer ${cookies["accessToken"]}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         })
 
+        const storeResponse = await storePromise
         const storeId = storeResponse.data?.data?.id
 
-        // console.log(storeId)
-
-        navigate("/dashHome", { state: { storeId } })
-      } else if (response.status === 400) {
-        alert("ss")
+        if (storeId) {
+          navigate("/dashHome", { state: { storeId } })
+        } else {
+          console.error("상점 정보를 가져오는 데 실패했습니다.")
+        }
+      } else if (loginResponse.status === 400) {
+        alert("로그인 실패: 잘못된 요청입니다.")
       }
     } catch (error) {
-      console.error("Login failed:", error)
+      console.error("로그인 실패:", error)
     }
   }
 
