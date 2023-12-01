@@ -5,15 +5,13 @@ import { useDispatch } from "react-redux"
 import { setCategory } from "../../store/slices/selectItem"
 import { SpeedDial, SpeedDialIcon } from "@mui/material"
 
-function Category() {
+function Category({ storeId }) {
+  console.log(storeId)
   const { data, isLoading, isError } = useGetDatasQuery(1)
   const dispatch = useDispatch()
 
-  const [selectedCategory, setSelectedCategory] = useState(null)
-
   const handleCategoryClick = (categoryId: number) => {
     dispatch(setCategory(categoryId))
-    setSelectedCategory(categoryId)
   }
 
   if (isLoading) {
@@ -22,20 +20,10 @@ function Category() {
 
   return (
     <S.CategoryWrapper>
-      {/* <SpeedDial
-        ariaLabel="SpeedDial basic example"
-        sx={{ position: "absolute", bottom: 16, right: 16 }}
-        icon={<SpeedDialIcon />}
-      /> */}
-
       <S.CategoryBtn>카테고리 생성</S.CategoryBtn>
       {data.data &&
         data.data.map((item) => (
-          <S.CategoryNameWrapper
-            onClick={() => handleCategoryClick(item.id)}
-            key={item.id}
-            style={{ backgroundColor: selectedCategory === item.id ? "#ddd" : "transparent" }}
-          >
+          <S.CategoryNameWrapper onClick={() => handleCategoryClick(item.id)} key={item.id}>
             <S.CategoryName>{item.name}</S.CategoryName>
           </S.CategoryNameWrapper>
         ))}

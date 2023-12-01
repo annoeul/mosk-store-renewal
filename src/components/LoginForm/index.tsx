@@ -13,6 +13,7 @@ import { Link, useNavigate } from "react-router-dom"
 import useInput from "../../hooks/useInput"
 import { useCookies } from "react-cookie"
 import signApi from "../../apis/signApi"
+import axios from "axios"
 
 export default function LoginForm() {
   const { userInput, onChange } = useInput({
@@ -35,7 +36,17 @@ export default function LoginForm() {
       if (response.status === 201) {
         const accessToken = response.data?.data?.accessToken
         setCookie("accessToken", accessToken, { path: "/" })
-        navigate("/dashHome")
+        const storeResponse = await axios.get(`${import.meta.env.VITE_SERVER_URL}/stores`, {
+          headers: {
+            Authorization: `Bearer ${cookies["accessToken"]}`,
+          },
+        })
+
+        const storeId = storeResponse.data?.data?.id
+
+        // console.log(storeId)
+
+        navigate("/dashHome", { state: { storeId } })
       } else if (response.status === 400) {
         alert("ss")
       }
