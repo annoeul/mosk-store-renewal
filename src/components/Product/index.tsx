@@ -1,50 +1,65 @@
 import axios from "axios"
 import React, { useEffect, useState } from "react"
+import Card from "@mui/material/Card"
+import CardContent from "@mui/material/CardContent"
+import CardMedia from "@mui/material/CardMedia"
+import Typography from "@mui/material/Typography"
+import Grid from "@mui/material/Grid"
+import { Box, Container } from "@mui/material"
 
-function Product({ filteredData }) {
-  const [imageURLs, setImageURLs] = useState([])
+interface ProductProps {
+  product: {
+    id: string
+    name: string
+    description: string
+    price: string
+  }
+}
+
+function Product({ product }: ProductProps): JSX.Element {
+  const [imageURL, setImageURL] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchImageData = async () => {
       try {
-        const imagePromises = filteredData.products.map(async (product) => {
-          const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/public/products/img/${product.id}`)
-          const imageData = response.data.data
+        const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/public/products/img/${product.id}`)
+        const imageData = response.data.data
 
-          if (imageData.encodedImg && imageData.imgType) {
-            const dataURL = `data:image/${imageData.imgType};base64,${imageData.encodedImg}`
-            return dataURL
-          } else {
-            return null
-          }
-        })
-        const imageURLArray = await Promise.all(imagePromises)
-        setImageURLs(imageURLArray)
+        if (imageData.encodedImg && imageData.imgType) {
+          const dataURL = `data:image/${imageData.imgType};base64,${imageData.encodedImg}`
+          setImageURL(dataURL)
+        }
       } catch (error) {
         console.error("Error fetching image data:", error)
       }
     }
+
     fetchImageData()
-  }, [filteredData.products])
+  }, [product.id])
 
   return (
-    <div style={{ backgroundColor: "beige", width: "100%" }}>
-      <div>
-        <h1>{filteredData.name}</h1>
-        {filteredData.products.length > 0 ? (
-          filteredData.products.map((product, index) => (
-            <div key={product.id}>
-              <img src={imageURLs[index]} alt="Product" style={{ maxWidth: "100%" }} />
-              <p>{product.name}</p>
-              <p>{product.description}</p>
-              <p>{product.price}</p>
-            </div>
-          ))
-        ) : (
-          <p>상품이 없습니다.</p>
-        )}
-      </div>
-    </div>
+    <Container>
+      <Card style={{ height: "45%" }}>
+        <CardMedia
+          component="img"
+          height="200"
+          style={{ objectFit: "contain" }}
+          image={imageURL || "placeholder_image_url"}
+          alt="Product"
+        />
+        <CardContent>
+          <Typography variant="h5" component="div" style={{ textAlign: "center" }}>
+            {product.name}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {product.description}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {product.price}
+          </Typography>
+        </CardContent>
+      </Card>
+    </Container>
   )
 }
 

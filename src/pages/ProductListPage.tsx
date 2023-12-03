@@ -25,7 +25,7 @@ function ProductListPage({ storeId }) {
 
   // Process the data here
 
-  return <Product filteredData={filteredData} />
+  return filteredData.products.map((product) => <Product product={product} key={product.id} />)
 }
 
 export default ProductListPage
