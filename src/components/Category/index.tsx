@@ -22,7 +22,7 @@ function Category({ storeId }) {
       {data.data &&
         data.data.map((item) => (
           <S.CategoryNameWrapper onClick={() => handleCategoryClick(item.id)} key={item.id}>
-            <S.CategoryName>{data.data.length === 0 ? "카테고리가 없습니다." : item.name}</S.CategoryName>
+            <S.CategoryName>{item.name}</S.CategoryName>
           </S.CategoryNameWrapper>
         ))}
     </S.CategoryWrapper>
