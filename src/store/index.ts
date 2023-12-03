@@ -7,8 +7,8 @@ import categoryReducer from "./slices/selectItem"
 export const store = configureStore({
   reducer: {
     userInfo: userInfoReducer,
-    [getData.reducerPath]: getData.reducer,
     category: categoryReducer,
+    [getData.reducerPath]: getData.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(getData.middleware),
 })
