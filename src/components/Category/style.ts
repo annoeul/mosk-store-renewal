@@ -2,7 +2,7 @@ import { Box, Button, Container } from "@mui/material"
 import { styled } from "styled-components"
 
 export const CategoryWrapper = styled.div`
-  width: 15%;
+  /* width: 15%; */
   min-width: 15%;
   height: 100vh;
   box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;

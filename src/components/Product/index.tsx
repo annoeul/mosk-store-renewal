@@ -1,11 +1,7 @@
 import axios from "axios"
 import React, { useEffect, useState } from "react"
-import Card from "@mui/material/Card"
-import CardContent from "@mui/material/CardContent"
-import CardMedia from "@mui/material/CardMedia"
-import Typography from "@mui/material/Typography"
-import Grid from "@mui/material/Grid"
-import { Box, Container } from "@mui/material"
+import { Container } from "@mui/material"
+import * as S from "./style"
 
 interface ProductProps {
   product: {
@@ -38,28 +34,18 @@ function Product({ product }: ProductProps): JSX.Element {
   }, [product.id])
 
   return (
-    <Container>
-      <Card style={{ height: "45%" }}>
-        <CardMedia
-          component="img"
-          height="200"
-          style={{ objectFit: "contain" }}
-          image={imageURL || "placeholder_image_url"}
-          alt="Product"
-        />
-        <CardContent>
-          <Typography variant="h5" component="div" style={{ textAlign: "center" }}>
-            {product.name}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {product.description}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {product.price}
-          </Typography>
-        </CardContent>
-      </Card>
-    </Container>
+    // <Container>
+    <S.ProductContainer>
+      <S.ProductCard>
+        <S.ProductImage src={imageURL || "placeholder_image_url"} alt="Product" />
+        <S.ProductContent>
+          <S.ProductName>{product.name}</S.ProductName>
+          <S.ProductDescription>{product.description}</S.ProductDescription>
+          <S.ProductPrice>{product.price}원</S.ProductPrice>
+        </S.ProductContent>
+      </S.ProductCard>
+    </S.ProductContainer>
+    // </Container>
   )
 }
 

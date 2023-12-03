@@ -3,6 +3,7 @@ import * as S from "./style"
 import { useGetDatasQuery } from "../../apis/getData"
 import { useDispatch } from "react-redux"
 import { setCategory } from "../../store/slices/selectItem"
+import { Container } from "@mui/material"
 
 function Category({ storeId }) {
   const { data, isLoading, isError } = useGetDatasQuery(storeId)
@@ -18,6 +19,7 @@ function Category({ storeId }) {
 
   return (
     <S.CategoryWrapper>
+      {/* <Container> */}
       <S.CategoryBtn>카테고리 생성</S.CategoryBtn>
       {data.data &&
         data.data.map((item) => (
@@ -25,6 +27,7 @@ function Category({ storeId }) {
             <S.CategoryName>{item.name}</S.CategoryName>
           </S.CategoryNameWrapper>
         ))}
+      {/* </Container> */}
     </S.CategoryWrapper>
   )
 }

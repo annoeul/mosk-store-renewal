@@ -23,8 +23,6 @@ function ProductListPage({ storeId }) {
   const filteredData =
     data && data.data.filter((item) => item.id === (selectedCategory || (data.data[0] && data.data[0].id)))[0]
 
-  // Process the data here
-
   return filteredData.products.map((product) => <Product product={product} key={product.id} />)
 }
 
