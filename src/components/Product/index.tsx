@@ -1,47 +1,49 @@
-import React, { useEffect } from "react"
-import { useSelector, useDispatch } from "react-redux"
-import { useGetDatasQuery } from "../../apis/getData"
-import { setCategory } from "../../store/slices/selectItem"
+import axios from "axios"
+import React, { useEffect, useState } from "react"
 
-function Product({ storeId }) {
-  const dispatch = useDispatch()
-  const selectedCategory = useSelector((state) => state.category.selectCategory)
-  const { data, isLoading, isError } = useGetDatasQuery(storeId)
+function Product({ filteredData }) {
+  const [imageURLs, setImageURLs] = useState([])
 
   useEffect(() => {
-    if (!isLoading && data && data.data && data.data.length > 0) {
-      const firstCategoryId = data.data[0].id
-      dispatch(setCategory(firstCategoryId))
+    const fetchImageData = async () => {
+      try {
+        const imagePromises = filteredData.products.map(async (product) => {
+          const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/public/products/img/${product.id}`)
+          const imageData = response.data.data
+
+          if (imageData.encodedImg && imageData.imgType) {
+            const dataURL = `data:image/${imageData.imgType};base64,${imageData.encodedImg}`
+            return dataURL
+          } else {
+            return null
+          }
+        })
+        const imageURLArray = await Promise.all(imagePromises)
+        setImageURLs(imageURLArray)
+      } catch (error) {
+        console.error("Error fetching image data:", error)
+      }
     }
-  }, [data, isLoading, dispatch])
-
-  if (isLoading) {
-    return <>로딩중</>
-  }
-
-  const filteredData =
-    data && data.data.filter((item) => item.id === (selectedCategory || (data.data[0] && data.data[0].id)))[0]
+    fetchImageData()
+  }, [filteredData.products])
 
   return (
-    <div style={{ textAlign: "center", width: "100%" }}>
-      {filteredData ? (
-        <div>
-          <h1>{filteredData.name}</h1>
-          {filteredData.products.length > 0 ? (
-            filteredData.products.map((product) => (
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <p key={product.id}>{product.name}</p>
-                <p>{product.description}</p>
-                <p>{product.price}</p>
-              </div>
-            ))
-          ) : (
-            <p>상품이 없습니다.</p>
-          )}
-        </div>
-      ) : (
-        <p>카테고리가 없습니다.</p>
-      )}
+    <div style={{ backgroundColor: "beige", width: "100%" }}>
+      <div>
+        <h1>{filteredData.name}</h1>
+        {filteredData.products.length > 0 ? (
+          filteredData.products.map((product, index) => (
+            <div key={product.id}>
+              <img src={imageURLs[index]} alt="Product" style={{ maxWidth: "100%" }} />
+              <p>{product.name}</p>
+              <p>{product.description}</p>
+              <p>{product.price}</p>
+            </div>
+          ))
+        ) : (
+          <p>상품이 없습니다.</p>
+        )}
+      </div>
     </div>
   )
 }
