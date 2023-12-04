@@ -37,9 +37,9 @@ export const CategoryNameWrapper = styled.div`
     border-bottom: ${({ selected }) => (selected ? "1px solid black" : "1px solid black")};
   }
 
-  &:active {
+  /* &:active {
     background-color: #e0e0e0;
-  }
+  } */
 `
 
 export const CategoryName = styled.p`

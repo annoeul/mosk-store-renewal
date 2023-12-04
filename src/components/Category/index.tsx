@@ -8,9 +8,11 @@ import { Container } from "@mui/material"
 function Category({ storeId }) {
   const { data, isLoading, isError } = useGetDatasQuery(storeId)
   const dispatch = useDispatch()
+  const [selectedCategory, setSelectedCategory] = useState(null)
 
-  const handleCategoryClick = (categoryId: number) => {
+  const handleCategoryClick = (categoryId) => {
     dispatch(setCategory(categoryId))
+    setSelectedCategory(categoryId)
   }
 
   if (isLoading) {
@@ -19,15 +21,17 @@ function Category({ storeId }) {
 
   return (
     <S.CategoryWrapper>
-      {/* <Container> */}
       <S.CategoryBtn>카테고리 생성</S.CategoryBtn>
       {data.data &&
         data.data.map((item) => (
-          <S.CategoryNameWrapper onClick={() => handleCategoryClick(item.id)} key={item.id}>
+          <S.CategoryNameWrapper
+            onClick={() => handleCategoryClick(item.id)}
+            key={item.id}
+            selected={selectedCategory === item.id}
+          >
             <S.CategoryName>{item.name}</S.CategoryName>
           </S.CategoryNameWrapper>
         ))}
-      {/* </Container> */}
     </S.CategoryWrapper>
   )
 }
