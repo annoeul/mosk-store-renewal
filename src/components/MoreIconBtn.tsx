@@ -26,12 +26,12 @@ const MoreIconBtn = ({ onDelete, onEdit }) => {
   }
 
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: "relative", top: 0, right: "-90%" }}>
       <IconButton size="small" aria-label="display more actions" color="inherit" onClick={handleMoreIconClick}>
         <MoreIcon />
       </IconButton>
       {showMenu && (
-        <div style={{ position: "absolute", top: "100%", right: 0, zIndex: 1 }}>
+        <div style={{ position: "absolute", top: 30, right: 250 }}>
           <IconButton size="small" aria-label="delete" color="inherit" onClick={handleDelete}>
             <DeleteIcon />
           </IconButton>

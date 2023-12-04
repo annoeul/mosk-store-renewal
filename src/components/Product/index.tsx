@@ -2,6 +2,7 @@ import axios from "axios"
 import React, { useEffect, useState } from "react"
 import { Container } from "@mui/material"
 import * as S from "./style"
+import MoreIconBtn from "../MoreIconBtn"
 
 interface ProductProps {
   product: {
@@ -37,6 +38,7 @@ function Product({ product }: ProductProps): JSX.Element {
     // <Container>
     <S.ProductContainer>
       <S.ProductCard>
+        <MoreIconBtn />
         <S.ProductImage src={imageURL || "placeholder_image_url"} alt="Product" />
         <S.ProductContent>
           <S.ProductName>{product.name}</S.ProductName>

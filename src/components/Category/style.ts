@@ -1,8 +1,8 @@
-import { Box, Button, Container } from "@mui/material"
+// style.ts
+import { Button } from "@mui/material"
 import { styled } from "styled-components"
 
 export const CategoryWrapper = styled.div`
-  /* width: 15%; */
   min-width: 15%;
   height: 100vh;
   box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
@@ -18,17 +18,28 @@ export const CategoryBtn = styled(Button)`
     border-radius: 10px;
     background-color: #ddd;
     color: white;
-    /* cursor: pointer; */
-    /* font-family: "Noto Sans", sans-serif; Google Fonts 이름을 여기에 추가 */
+
+    &:hover {
+      background-color: #bbb; // 마우스 호버시 색상 변경
+    }
+
+    &:active {
+      background-color: #888; // 클릭시 색상 변경
+    }
   }
 `
 
 export const CategoryNameWrapper = styled.div`
   cursor: pointer;
-  /* width: 100%; */
-  /* text-align: center; */
-  border-bottom: 0.1px solid black;
-  /* font-family: "Noto Sans", sans-serif; Google Fonts 이름을 여기에 추가 */
+  border-bottom: ${({ selected }) => (selected ? "1px solid black" : "0.1px solid #eae")};
+
+  &:hover {
+    border-bottom: ${({ selected }) => (selected ? "1px solid black" : "1px solid black")};
+  }
+
+  &:active {
+    background-color: #e0e0e0;
+  }
 `
 
 export const CategoryName = styled.p`

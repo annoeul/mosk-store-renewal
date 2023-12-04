@@ -14,7 +14,7 @@ function DashHomePage() {
       <Header />
       <div style={{ display: "flex" }}>
         <Category storeId={storeId} />
-        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", height: "300px" }}>
           <ProductListPage storeId={storeId} />
         </div>
       </div>
