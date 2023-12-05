@@ -38,7 +38,7 @@ function Product({ product }: ProductProps): JSX.Element {
     // <Container>
     <S.ProductContainer>
       <S.ProductCard>
-        <MoreIconBtn />
+        <MoreIconBtn right={"-90%"} />
         <S.ProductImage src={imageURL || "placeholder_image_url"} alt="Product" />
         <S.ProductContent>
           <S.ProductName>{product.name}</S.ProductName>
