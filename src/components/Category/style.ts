@@ -1,4 +1,5 @@
 // style.ts
+
 import { Button } from "@mui/material"
 import { styled } from "styled-components"
 
@@ -11,7 +12,7 @@ export const CategoryWrapper = styled.div`
 
 export const CategoryBtn = styled(Button)`
   && {
-    text-align: center;
+    /* text-align: center; */
     width: 100%;
     height: 3rem;
     margin: 10px 0;
@@ -20,30 +21,31 @@ export const CategoryBtn = styled(Button)`
     color: white;
 
     &:hover {
-      background-color: #bbb; // 마우스 호버시 색상 변경
+      background-color: #bbb;
     }
 
     &:active {
-      background-color: #888; // 클릭시 색상 변경
+      background-color: #888;
     }
   }
 `
 
 export const CategoryNameWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   cursor: pointer;
   border-bottom: ${({ selected }) => (selected ? "1px solid black" : "0.1px solid #eae")};
 
   &:hover {
     border-bottom: ${({ selected }) => (selected ? "1px solid black" : "1px solid black")};
   }
-
-  /* &:active {
-    background-color: #e0e0e0;
-  } */
 `
 
 export const CategoryName = styled.p`
   font-family: "Noto Sans", sans-serif;
-  align-items: center;
-  text-align: center;
+  /* text-align: center; */
+  flex-grow: 1; /* Allows the category name to take up remaining space */
 `
+
+// Add custom styles for MoreIconBtn if needed

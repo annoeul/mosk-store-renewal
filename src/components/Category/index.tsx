@@ -3,7 +3,8 @@ import * as S from "./style"
 import { useGetDatasQuery, useCreateCategoryMutation } from "../../apis/getData"
 import { useDispatch } from "react-redux"
 import { setCategory } from "../../store/slices/selectItem"
-import { Container, TextField, Button } from "@mui/material"
+import { Container, TextField, Button, ButtonGroup } from "@mui/material"
+import MoreIconBtn from "../MoreIconBtn"
 
 function Category({ storeId }) {
   const { data, isLoading, isError } = useGetDatasQuery(storeId)
@@ -24,7 +25,6 @@ function Category({ storeId }) {
 
   const onChange = (e) => {
     setNewCategoryName(e.target.value)
-    console.log(newCategory)
   }
 
   const handleCreateCategory = () => {
@@ -42,9 +42,7 @@ function Category({ storeId }) {
       {isCreatingCategory ? (
         <>
           <TextField label="카테고리 이름" variant="standard" fullWidth value={newCategory} onChange={onChange} />
-          <Button variant="contained" onClick={handleCreateCategory}>
-            확인
-          </Button>
+          <Button onClick={handleCreateCategory}>One</Button>
         </>
       ) : (
         <S.CategoryBtn onClick={handleCreateCategoryClick}>카테고리 생성</S.CategoryBtn>
@@ -58,6 +56,7 @@ function Category({ storeId }) {
             selected={selectedCategory === item.id}
           >
             <S.CategoryName>{item.name}</S.CategoryName>
+            <MoreIconBtn />
           </S.CategoryNameWrapper>
         ))}
     </S.CategoryWrapper>
