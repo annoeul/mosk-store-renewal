@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import * as S from "./style"
-import { useGetDatasQuery, useCreateCategoryMutation } from "../../apis/getData"
+import { useGetDatasQuery, useCreateCategoryMutation, useDeleteCategoryMutation } from "../../apis/getData"
 import { useDispatch } from "react-redux"
 import { setCategory } from "../../store/slices/selectItem"
 import { Container, TextField, Button, ButtonGroup } from "@mui/material"
@@ -13,6 +13,7 @@ function Category({ storeId }) {
   const [isCreatingCategory, setIsCreatingCategory] = useState(false)
   const [newCategory, setNewCategoryName] = useState("")
   const [createCategoryMutation] = useCreateCategoryMutation()
+  const [deleteCategory] = useDeleteCategoryMutation()
 
   const handleCategoryClick = (categoryId) => {
     dispatch(setCategory(categoryId))
@@ -31,6 +32,15 @@ function Category({ storeId }) {
     createCategoryMutation({
       data: newCategory,
     })
+  }
+
+  const handleDeleteCategory = (id: number, name: string) => {
+    const checkCategory = window.confirm(`${name} 카테고리를 삭제하시겠습니까?`)
+    if (checkCategory) {
+      deleteCategory(id)
+    } else {
+      return
+    }
   }
 
   if (isLoading) {
@@ -56,7 +66,7 @@ function Category({ storeId }) {
             selected={selectedCategory === item.id}
           >
             <S.CategoryName>{item.name}</S.CategoryName>
-            <MoreIconBtn />
+            <MoreIconBtn onDelete={() => handleDeleteCategory(item.id, item.name)} />
           </S.CategoryNameWrapper>
         ))}
     </S.CategoryWrapper>
