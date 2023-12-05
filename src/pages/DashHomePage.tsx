@@ -3,6 +3,7 @@ import Category from "../components/Category"
 import Header from "../components/Header"
 import { useLocation } from "react-router-dom"
 import ProductListPage from "./ProductListPage"
+import BasicSpeedDial from "../components/CreateBtn"
 
 function DashHomePage() {
   const location = useLocation()
@@ -18,6 +19,7 @@ function DashHomePage() {
           <ProductListPage storeId={storeId} />
         </div>
       </div>
+      <BasicSpeedDial />
     </>
   )
 }

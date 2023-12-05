@@ -16,6 +16,10 @@ interface ProductProps {
 function Product({ product }: ProductProps): JSX.Element {
   const [imageURL, setImageURL] = useState<string | null>(null)
 
+  const onClick = (item) => {
+    console.log(item)
+  }
+
   useEffect(() => {
     const fetchImageData = async () => {
       try {
@@ -38,7 +42,7 @@ function Product({ product }: ProductProps): JSX.Element {
     // <Container>
     <S.ProductContainer>
       <S.ProductCard>
-        <MoreIconBtn right={"-90%"} />
+        <MoreIconBtn right={"-90%"} onDelete={() => onClick(product)} />
         <S.ProductImage src={imageURL || "placeholder_image_url"} alt="Product" />
         <S.ProductContent>
           <S.ProductName>{product.name}</S.ProductName>
