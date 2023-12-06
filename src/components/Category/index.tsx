@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react"
+// Category.js
+import React, { useState } from "react"
 import * as S from "./style"
-import { useGetDatasQuery, useCreateCategoryMutation, useDeleteCategoryMutation } from "../../apis/getData"
 import { useDispatch } from "react-redux"
 import { setCategory } from "../../store/slices/selectItem"
-import { Container, TextField, Button, ButtonGroup } from "@mui/material"
+import { TextField, Button } from "@mui/material"
 import MoreIconBtn from "../MoreIconBtn"
+import { useCreateCategoryMutation, useDeleteCategoryMutation } from "../../apis/getData"
 
-function Category({ storeId }) {
-  const { data, isLoading, isError } = useGetDatasQuery(storeId)
+const Category = ({ categories }) => {
   const dispatch = useDispatch()
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [isCreatingCategory, setIsCreatingCategory] = useState(false)
   const [newCategory, setNewCategoryName] = useState("")
+  const [deleteCategoryMutation] = useDeleteCategoryMutation()
   const [createCategoryMutation] = useCreateCategoryMutation()
-  const [deleteCategory] = useDeleteCategoryMutation()
 
   const handleCategoryClick = (categoryId) => {
     dispatch(setCategory(categoryId))
@@ -34,17 +34,11 @@ function Category({ storeId }) {
     })
   }
 
-  const handleDeleteCategory = (id: number, name: string) => {
+  const handleDeleteCategory = (id, name) => {
     const checkCategory = window.confirm(`${name} 카테고리를 삭제하시겠습니까?`)
     if (checkCategory) {
-      deleteCategory(id)
-    } else {
-      return
+      deleteCategoryMutation(id)
     }
-  }
-
-  if (isLoading) {
-    return <>로딩중</>
   }
 
   return (
@@ -58,15 +52,15 @@ function Category({ storeId }) {
         <S.CategoryBtn onClick={handleCreateCategoryClick}>카테고리 생성</S.CategoryBtn>
       )}
 
-      {data.data &&
-        data.data.map((item) => (
+      {categories &&
+        categories.map((category) => (
           <S.CategoryNameWrapper
-            onClick={() => handleCategoryClick(item.id)}
-            key={item.id}
-            selected={selectedCategory === item.id}
+            onClick={() => handleCategoryClick(category.id)}
+            key={category.id}
+            selected={selectedCategory === category.id}
           >
-            <S.CategoryName>{item.name}</S.CategoryName>
-            <MoreIconBtn onDelete={() => handleDeleteCategory(item.id, item.name)} />
+            <S.CategoryName>{category.name}</S.CategoryName>
+            <MoreIconBtn onDelete={() => handleDeleteCategory(category.id, category.name)} />
           </S.CategoryNameWrapper>
         ))}
     </S.CategoryWrapper>
