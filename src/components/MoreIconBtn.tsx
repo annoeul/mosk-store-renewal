@@ -16,15 +16,15 @@ const MoreIconBtn = ({ onDelete, onEdit, right = 0 }) => {
   const handleDelete = (e) => {
     e.stopPropagation()
     onDelete()
-    setShowMenu(false) // Close menu after clicking delete
+    setShowMenu(false)
   }
 
   const handleEdit = (e) => {
     e.stopPropagation()
     onEdit()
-    setShowMenu(false) // Close menu after clicking edit
+    setShowMenu(false)
   }
-  // top: 0, right: "-90%"
+
   return (
     <div style={{ position: "relative", right: right }}>
       <IconButton size="small" aria-label="display more actions" color="inherit" onClick={handleMoreIconClick}>
