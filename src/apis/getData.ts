@@ -6,8 +6,8 @@ export const getData = createApi({
   tagTypes: ["datas"],
   baseQuery: fetchBaseQuery({
     baseUrl: import.meta.env.VITE_SERVER_URL,
-    prepareHeaders: (headers) => {
-      const token = getCookie("accessToken")
+    prepareHeaders: async (headers) => {
+      const token = await getCookie("accessToken")
       headers.set("Authorization", `Bearer ${token}`)
       return headers
     },
@@ -38,4 +38,8 @@ export const getData = createApi({
   }),
 })
 
-export const { useGetDatasQuery, useCreateCategoryMutation, useDeleteCategoryMutation } = getData
+export const {
+  useGetDatasQuery,
+  useCreateCategoryMutation,
+  useDeleteCategoryMutation,
+} = getData

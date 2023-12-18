@@ -20,10 +20,13 @@ function ProductListPage({ storeId }) {
     return <>로딩중</>
   }
 
-  const filteredData =
-    data && data.data.filter((item) => item.id === (selectedCategory || (data.data[0] && data.data[0].id)))[0]
+  const filteredData = data.data.find(
+    (item) => item.id === (selectedCategory || data.data[0].id)
+  )
 
-  return filteredData.products.map((product) => <Product product={product} key={product.id} />)
+  return filteredData.products.map((product) => (
+    <Product product={product} key={product.id} />
+  ))
 }
 
 export default ProductListPage

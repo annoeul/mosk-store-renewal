@@ -96,8 +96,16 @@ export default function LoginForm() {
             label="Password"
             type="password"
           />
-          <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Remember me"
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
             Sign In
           </Button>
           <Grid container>

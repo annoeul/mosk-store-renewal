@@ -5,7 +5,10 @@ import { useDispatch } from "react-redux"
 import { setCategory } from "../../store/slices/selectItem"
 import { TextField, Button } from "@mui/material"
 import MoreIconBtn from "../MoreIconBtn"
-import { useCreateCategoryMutation, useDeleteCategoryMutation } from "../../apis/getData"
+import {
+  useCreateCategoryMutation,
+  useDeleteCategoryMutation,
+} from "../../apis/getData"
 
 const Category = ({ categories }) => {
   const dispatch = useDispatch()
@@ -29,9 +32,19 @@ const Category = ({ categories }) => {
   }
 
   const handleCreateCategory = () => {
+    if (newCategory === "") {
+      alert("값을 입력해주세요")
+      return
+    }
     createCategoryMutation({
       data: newCategory,
     })
+    setNewCategoryName("")
+    setIsCreatingCategory(false)
+  }
+
+  const handleCancelCategory = () => {
+    setIsCreatingCategory(false)
   }
 
   const handleDeleteCategory = (id, name) => {
@@ -45,11 +58,20 @@ const Category = ({ categories }) => {
     <S.CategoryWrapper>
       {isCreatingCategory ? (
         <>
-          <TextField label="카테고리 이름" variant="standard" fullWidth value={newCategory} onChange={onChange} />
-          <Button onClick={handleCreateCategory}>One</Button>
+          <TextField
+            label="카테고리 이름"
+            variant="standard"
+            fullWidth
+            value={newCategory}
+            onChange={onChange}
+          />
+          <Button onClick={handleCancelCategory}>취소</Button>
+          <Button onClick={handleCreateCategory}>생성</Button>
         </>
       ) : (
-        <S.CategoryBtn onClick={handleCreateCategoryClick}>카테고리 생성</S.CategoryBtn>
+        <S.CategoryBtn onClick={handleCreateCategoryClick}>
+          카테고리 생성
+        </S.CategoryBtn>
       )}
 
       {categories &&
@@ -60,7 +82,9 @@ const Category = ({ categories }) => {
             selected={selectedCategory === category.id}
           >
             <S.CategoryName>{category.name}</S.CategoryName>
-            <MoreIconBtn onDelete={() => handleDeleteCategory(category.id, category.name)} />
+            <MoreIconBtn
+              onDelete={() => handleDeleteCategory(category.id, category.name)}
+            />
           </S.CategoryNameWrapper>
         ))}
     </S.CategoryWrapper>
